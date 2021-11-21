@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Precision">
+
+    <Color x:Key="LightPurp">#EEDFFF</Color>
+    <SolidColorBrush x:Key="LightPurpBrush" Color="{StaticResource LightPurp}"/>
+
+    <Color x:Key="DarkPurp">#945EC9</Color>
+    <SolidColorBrush x:Key="DarkPurpBrush" Color="{StaticResource DarkPurp}"/>
+
+    <Color x:Key="DarkestPurp">#332145</Color>
+    <SolidColorBrush x:Key="DarkestPurpBrush" Color="{StaticResource DarkestPurp}"/>
+
+    <Color x:Key="LightGrn">#9dec9d</Color>
+    <SolidColorBrush x:Key="LightGrnBrush" Color="{StaticResource LightGrn}"/>
+
+</ResourceDictionary>

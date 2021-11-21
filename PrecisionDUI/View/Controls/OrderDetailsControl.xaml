@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="Precision.View.OrderDetailsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Precision.View"
+             xmlns:vm="clr-namespace:Precision.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:OrderDetailsViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource DarkestPurpBrush}">
+
+        <!--Main Content-->
+        <Grid Margin="25 10 25 25" Background="{StaticResource MaterialDesignDarkBackground}">
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5*"/>
+                </Grid.RowDefinitions>
+
+                <Border BorderThickness="0 0 0 2" BorderBrush="{StaticResource LightGrnBrush}">
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="{Binding OrderID}" FontSize="16" DockPanel.Dock="Right"/>
+                        <TextBlock Text="Order ID: " FontSize="16" DockPanel.Dock="Right"/>
+                    </DockPanel>
+                </Border>
+
+                <Grid Grid.Row="1" Background="{StaticResource MaterialDesignDarkBackground}">
+                    <DockPanel LastChildFill="False">
+
+                        <ListView ItemsSource="{Binding Products}" DockPanel.Dock="Top">
+                            <ListView.View>
+                                <GridView>
+
+                                    <GridViewColumn Width="50">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Quantity" />
+                                    <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Price" />
+                                    <GridViewColumn DisplayMemberBinding="{Binding Tax}" Header="Tax"/>
+
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+
+                            <Button Content="Email Inovice" Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                            <Button Content="Submit Payment" Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+                            <TextBlock Text="Total: $" Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
+                            <TextBlock Text="{Binding TotalPrice}" Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
+                        </StackPanel>
+
+                    </DockPanel>
+
+                </Grid>
+
+            </Grid>
+        </Grid>
+    </Grid>
+
+    
+    
+</UserControl>
