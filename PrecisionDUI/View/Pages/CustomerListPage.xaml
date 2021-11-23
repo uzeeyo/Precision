@@ -17,7 +17,7 @@
         <Grid Background="{StaticResource MaterialDesignDarkBackground}" 
               Margin="25 10 25 25" Grid.Column="1">
             <ScrollViewer>
-                <local:CardListItemControl Margin="5"/>
+                <local:CardListItemControl Margin="5" x:Name="CustomerList"/>
             </ScrollViewer>
         </Grid>
             
