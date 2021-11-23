@@ -21,6 +21,9 @@
         <DataTemplate DataType="{x:Type vm:CustomerListViewModel}">
             <v:CustomerListPage/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:OrderDetailsViewModel}">
+            <v:OrderDetailsPage />
+        </DataTemplate>
     </Window.Resources>
     
     <Window.DataContext>
@@ -62,7 +65,7 @@
 
                     <!--Current Page-->
                     <Grid Grid.Row="1" Background="{StaticResource DarkestPurpBrush}">
-                        <ContentControl Content="{Binding CurrentPage}"/>
+                        <ContentControl x:Name="MainContent" Content="{Binding CurrentPage}"/>
                     </Grid>
 
                 </Grid>
