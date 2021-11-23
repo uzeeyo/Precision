@@ -19,8 +19,6 @@ namespace Precision.ViewModel
         }
 
         public string PageName { get; set; }
-        public int OrderID { get { return _orderID; } }
-        public double Price { get { return _price; } }
 
 
 

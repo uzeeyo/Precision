@@ -1,28 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
+﻿using Precision.Model;
 using Precision.Services;
-using Precision.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Precision.ViewModel
 {
-    class CardListItemViewModel
+    class CardListItemViewModel 
     {
+        #region Private Fields
+
+
+        #endregion
+
+        #region Constructor
         /// <summary>
-        /// Default constructor to initialize properties
+        /// Default constructor to initialize properties based on the page type. 
         /// </summary>
-        public CardListItemViewModel()
+        public CardListItemViewModel(string param)
         {
-            LoadCustomerCards();
+            switch (param)
+            {
+                case "Customers":
+                    ListType = param;
+                    LoadCustomerCards();
+                    break;
+                case "Orders":
+                    ListType = param;
+                    LoadOrderCards();
+                    break;
+                
+            }
         }
+        #endregion
 
         #region Public Properties
         public List<Card> Cards { get; set; }
+        public string ListType { get; set; }
         #endregion
 
-        public void LoadCustomerCards()
+        #region Methods
+
+        private void LoadCustomerCards()
         {
             var cda = new CustomerDataAccess();
             var custList = cda.GetAllCustomers();
@@ -38,6 +56,19 @@ namespace Precision.ViewModel
             Cards = cards.ToList();
         }
 
+        private void LoadOrderCards()
+        {
+            var oda = new OrderDataAccess();
+            var orderList = oda.GetAllOrderCards();
+            Cards = orderList;
 
+        }
+
+        private void ViewOrderDetails(int id)
+        {
+
+        }
+
+        #endregion
     }
 }

@@ -1,20 +1,24 @@
-﻿using System;
+﻿using Precision.Model;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
 using System.Windows.Input;
 
 namespace Precision.ViewModel
 {
     public class MainViewModel : ObservableObject
     {
+        #region Private Fields
+
         private ICommand _changePage;
+        private ICommand _viewCommand;
         private IPageViewModel _currentPage;
         private string _pageName;
-        private List<IPageViewModel> _pages;
 
+        #endregion
+
+        /// <summary>
+        /// Default constructor sets initial page to Home
+        /// </summary>
         public MainViewModel()
         {
             Pages = new List<IPageViewModel>();
@@ -62,12 +66,31 @@ namespace Precision.ViewModel
             }
         }
 
+        public ICommand ViewCommand
+        {
+            get
+            {
+                if (_viewCommand == null)
+                {
+                    _viewCommand = new RelayCommand(
+                        p => OpenOrderDetails((Card)p),
+                        p => p is Card
+                        );
+                }
+                return _viewCommand;
+            }
+        }
+
         private void ChangePageViewModel(IPageViewModel page)
         {
             CurrentPage = page;
-            CurrentPageName = page.PageName;
+            CurrentPageName = CurrentPage.PageName;
         }
 
-
+        private void OpenOrderDetails(Card c)
+        {
+            CurrentPage = new OrderDetailsViewModel(c);
+            CurrentPageName = CurrentPage.PageName;
+        }
     }
 }

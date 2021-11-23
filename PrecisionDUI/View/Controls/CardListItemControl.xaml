@@ -8,9 +8,6 @@
              xmlns:vm="clr-namespace:Precision.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <vm:CardListItemViewModel/>
-    </UserControl.DataContext>
 
 
     <ItemsControl ItemsSource="{Binding Cards}">
@@ -45,11 +42,11 @@
                                 </Grid>
                             </DockPanel>
 
-                            <!--Options Buttons-->
+                            <!--Option Buttons-->
                             <StackPanel Orientation="Horizontal" Grid.Column="1">
                                 <Button VerticalAlignment="Bottom"
                                         Style="{StaticResource MaterialDesignFlatAccentButton}"
-                                        Command="{Binding ViewCommand}">
+                                        Command="{Binding Path=DataContext.ViewCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" CommandParameter="{Binding}">
                                     <Button.Content>
                                         <TextBlock Text="VIEW" FontFamily="{md:MaterialDesignFont}"/>
                                     </Button.Content>
@@ -62,11 +59,30 @@
                                     </Button.Content>
                                 </Button>
 
-                                <Button VerticalAlignment="Bottom"
+                                <Button VerticalAlignment="Bottom" Command="{x:Static md:DialogHost.OpenDialogCommand}"
                                         Style="{StaticResource MaterialDesignFlatAccentButton}">
                                     <Button.Content>
                                         <TextBlock Text="DELETE" FontFamily="{md:MaterialDesignFont}"/>
                                     </Button.Content>
+                                    <Button.CommandParameter>
+                                        <StackPanel Margin="16" Orientation="Vertical">
+                                            <TextBlock Text="Are you sure you want to delete this?"/>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 0">
+                                                <Button Style="{StaticResource MaterialDesignFlatAccentButton}">
+                                                    <Button.Content>
+                                                        <TextBlock Text="YES" FontFamily="{md:MaterialDesignFont}"/>
+                                                    </Button.Content>
+                                                </Button>
+                                                <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                        Command="{x:Static md:DialogHost.CloseDialogCommand}">
+                                                    <Button.Content>
+                                                        <TextBlock Text="NO" FontFamily="{md:MaterialDesignFont}"/>
+                                                    </Button.Content>
+                                                </Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button.CommandParameter>
+                                    
                                 </Button>
                             </StackPanel>
                         </Grid>

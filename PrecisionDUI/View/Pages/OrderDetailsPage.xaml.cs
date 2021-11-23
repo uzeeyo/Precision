@@ -18,9 +18,9 @@ namespace Precision.View
     /// <summary>
     /// Interaction logic for OrderListItemControl.xaml
     /// </summary>
-    public partial class OrderDetailsControl : UserControl
+    public partial class OrderDetailsPage : UserControl
     {
-        public OrderDetailsControl()
+        public OrderDetailsPage()
         {
             InitializeComponent();
         }

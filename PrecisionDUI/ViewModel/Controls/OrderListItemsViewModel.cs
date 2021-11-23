@@ -12,7 +12,7 @@ namespace Precision.ViewModel
     {
         private List<Product> _products;
         private ICommand _viewCommand;
-        private double _totalPrice;
+        private decimal _totalPrice;
 
         public OrderListItemsViewModel()
         {
@@ -32,7 +32,7 @@ namespace Precision.ViewModel
             }
         }
 
-        public double TotalPrice
+        public decimal TotalPrice
         {
             get { return _totalPrice; }
             set
