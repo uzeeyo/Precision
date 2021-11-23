@@ -17,7 +17,14 @@ namespace Precision.Model
         public int ProductID { get; set; }
         public int CategoryID { get; set; }
         public string Name { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public bool Taxable { get; set; }
+        public string PriceFormatted
+        {
+            get
+            {
+                return $"{Price:C}";
+            }
+        }
     }
 }
