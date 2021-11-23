@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Precision.Model
 {
@@ -10,7 +6,11 @@ namespace Precision.Model
     {
         public int OrderID { get; set; }
         public int CustomerID { get; set; }
-        public double Price { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber {get; set;}
+        public string EmailAddress { get; set; }
+        public decimal Price { get; set; }
         public List<Product> Products { get; set; }
         public string Notes { get; set; }
     }
