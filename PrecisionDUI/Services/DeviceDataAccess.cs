@@ -7,17 +7,18 @@ using System.Data.SqlClient;
 
 namespace Precision.Services
 {
-    class DeviceDataAccess : DataAccessBase
+    static class DeviceDataAccess 
     {
-        public List<Device> GetAllDevices()
+        public static List<Device> GetAllDevices()
         {
             var query = "SELECT * FROM Devices";
             var devices = new List<Device>();
-            using (var cmd = new SqlCommand(query, conString))
+            var conn = DataAccessBase.conString;
+            using (var cmd = new SqlCommand(query, conn))
             {
                 try
                 {
-                    conString.Open();
+                    conn.Open();
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
@@ -40,16 +41,17 @@ namespace Precision.Services
             }
             return devices;
         }
-        public List<Device> GetAllDevicesByCustomerID(Device device)
+        public static List<Device> GetAllDevicesByCustomerID(Device device)
         {
             var query = "SELECT Devices.DeviceID, Devices.CustomerID, Devices.Make, Devices.Model, Devices.OSType FROM Devices" +
                         "WHERE Devices.CustomerID = @id";
             var devices = new List<Device>();
-            using (var cmd = new SqlCommand(query, conString))
+            var conn = DataAccessBase.conString;
+            using (var cmd = new SqlCommand(query, conn))
             {
                 try
                 {
-                    conString.Open();
+                    conn.Open();
                     cmd.Parameters.AddWithValue("@id", device.CustomerID);
                     var reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -71,21 +73,22 @@ namespace Precision.Services
                 }
                 finally
                 {
-                    conString.Close();
+                    conn.Close();
                 }
             }
             return devices;
         }
 
-        public void AddDevice(Device device)
+        public static void AddDevice(Device device)
         {
             
         }
 
-        public void RemoveDevice(int id)
+        public static void RemoveDevice(int id)
         {
             string query = "DELETE FROM Devices WHERE Devices.CustomerID = @id";
-            using(var cmd = new SqlCommand(query, conString))
+            var conn = DataAccessBase.conString;
+            using (var cmd = new SqlCommand(query, conn))
             {
                 try
                 {

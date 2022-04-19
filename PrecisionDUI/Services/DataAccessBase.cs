@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 
 namespace Precision
 {
-    class DataAccessBase
+    static class DataAccessBase
     {
-        public SqlConnection conString = new SqlConnection(ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString);
+        static public SqlConnection conString = new SqlConnection(ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString);
 
     }
 }

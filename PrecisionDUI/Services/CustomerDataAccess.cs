@@ -10,18 +10,18 @@ using Precision.Model;
 
 namespace Precision.Services 
 {
-    class CustomerDataAccess : DataAccessBase
+    static class CustomerDataAccess
     {
-        
-        public List<Customer> GetAllCustomers()
+
+        public static List<Customer> GetAllCustomers()
         {
             string query = "SELECT * FROM Customers";
             var customers = new List<Customer>();
-            using (var cmd = new SqlCommand(query, conString))
+            using (var cmd = new SqlCommand(query, DataAccessBase.conString))
             {
                 try
                 {
-                    conString.Open();
+                    DataAccessBase.conString.Open();
                     var reader = cmd.ExecuteReader();
 
                     if (reader.HasRows)
@@ -49,20 +49,76 @@ namespace Precision.Services
                 }
                 finally
                 {
-                    conString.Close();
+                    DataAccessBase.conString.Close();
                 }
                 return customers;
             }
 
         }
 
+        public static Customer GetCustomerByID(int customerID)
+        {
+            string query = "SELECT * FROM Customers WHERE CustomerID = @id";
+            var customer = new Customer();
+
+            using (var cmd = new SqlCommand(query, DataAccessBase.conString))
+            {
+                cmd.Parameters.AddWithValue("@id", customerID);
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    customer.CustomerID = (int)reader["ID"];
+                    customer.FirstName = (string)reader["FirstName"];
+                    customer.LastName = (string)reader["LastName"];
+                    customer.PhoneNumber = (string)reader["PhoneNumber"];
+                    customer.EmailAddress = (string)reader["EmailAddress"];
+                }
+            }
+            return customer;
+        }
+
+        public static Customer GetCustomerByOrderID(int orderID)
+        {
+            string query = "SELECT Customers.CustomerID, FirstName, LastName, PhoneNumber, EmailAddress FROM Customers " +
+                           "RIGHT JOIN Orders ON Orders.CustomerID = Customers.CustomerID " +
+                           "WHERE Orders.OrderID = @id";
+            var customer = new Customer();
+
+            using (SqlCommand cmd = new SqlCommand(query, DataAccessBase.conString))
+            {
+                try
+                {
+                    DataAccessBase.conString.Open();
+                    cmd.Parameters.AddWithValue("@id", orderID);
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        customer.CustomerID = (int)reader["CustomerID"];
+                        customer.FirstName = (string)reader["FirstName"];
+                        customer.LastName = (string)reader["LastName"];
+                        customer.PhoneNumber = (string)reader["PhoneNumber"];
+                        customer.EmailAddress = (string)reader["EmailAddress"];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                finally
+                {
+                    DataAccessBase.conString.Close();
+                }
+                
+            }
+            return customer;
+        }
 
 
-        public void AddCustomer(string firstName, string lastName, string phoneNumber, string emailAddress)
+        public static void AddCustomer(string firstName, string lastName, string phoneNumber, string emailAddress)
         {
             string query = "INSERT INTO Customers VALUES (@fname, @lname, @pNumber, @eAddress)";
 
-            using (var conn = conString)
+            using (var conn = DataAccessBase.conString)
             {
                 try
                 {
@@ -83,14 +139,14 @@ namespace Precision.Services
 
         }
 
-        public void RemoveCustomer(int id)
+        public static void RemoveCustomer(int id)
         {
             string query = "DELETE FROM Customers WHERE CustomerID = @id";
-            using (conString)
+            using (var conn = DataAccessBase.conString)
             {
                 try
                 {
-                    using (var cmd = new SqlCommand(query, conString))
+                    using (var cmd = new SqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
                         cmd.ExecuteNonQuery();
