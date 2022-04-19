@@ -2,7 +2,7 @@
 
 namespace Precision.Model
 {
-    public class Order : BaseModel
+    public class Order
     {
         public int OrderID { get; set; }
         public int CustomerID { get; set; }
@@ -13,5 +13,12 @@ namespace Precision.Model
         public decimal Price { get; set; }
         public List<Product> Products { get; set; }
         public string Notes { get; set; }
+        public string FullName
+        {
+            get
+            {
+                return $"{FirstName} {LastName}";
+            }
+        }
     }
 }
