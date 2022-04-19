@@ -7,37 +7,5 @@
              mc:Ignorable="d" 
              d:DesignHeight="567 " d:DesignWidth="200">
 
-    <DockPanel Background="{StaticResource DarkestPurpBrush}" LastChildFill="False">
-        <Border DockPanel.Dock="Top" Margin="15 15 15 0">
-            <StackPanel>
-                <TextBlock Text="Sort by" Foreground="White"/>
-                <RadioButton Content="Name" Foreground="White"/>
-                <RadioButton Content="Date" Foreground="White"/>
-                <RadioButton Content="Status" Foreground="White"/>
-                
-                <TextBlock Text="Filter" Foreground="White" Margin="0 15 0 0"/>
-                <CheckBox Content="In Progress" Foreground="White"/>
-                <CheckBox Content="Waiting for Parts" Foreground="White"/>
-                <CheckBox Content="Waiting for Customer" Foreground="White"/>
-                <CheckBox Content="Completed" Foreground="White"/>
-
-                <DatePicker Margin="0 10 20 0"/>
-
-            </StackPanel>
-        </Border>
-
-        <Grid DockPanel.Dock="Bottom" Margin="5 0 5 15">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            
-            <TextBox  Grid.Column="0"/>
-            <Button Content="Search" Grid.Column="1" Padding="6 0"/>
-
-        </Grid>
-
-
-
-    </DockPanel>
+    
 </UserControl>

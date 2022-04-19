@@ -11,7 +11,6 @@ namespace Precision.View
         public CustomerListPage()
         {
             InitializeComponent();
-            CustomerList.DataContext = new CardListItemViewModel("Customers");
         }
     }
 }

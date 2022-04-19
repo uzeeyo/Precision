@@ -8,22 +8,142 @@
              xmlns:local="clr-namespace:Precision.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
 
     <Grid Background="{StaticResource DarkestPurpBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        
-        <local:SearchPanel/>
+
+        <DockPanel Background="{StaticResource DarkestPurpBrush}" LastChildFill="False">
+            <Border DockPanel.Dock="Top" Margin="15 15 15 0">
+                <StackPanel>
+                    <TextBlock Text="Sort by" Foreground="White"/>
+                    <RadioButton GroupName="SortByGroup" Content="Name" Foreground="White"/>
+                    <RadioButton GroupName="SortByGroup" Content="Make" Foreground="White"/>
+                    <RadioButton GroupName="SortByGroup" Content="Model" Foreground="White"/>
+                    <RadioButton GroupName="SortByGroup" Content="Creation Date" Foreground="White"/>
+
+
+                    <TextBlock Text="Filter" Foreground="White" Margin="0 15 0 0"/>
+                    <CheckBox Content="In Progress" Foreground="White"/>
+                    <CheckBox Content="Waiting for Parts" Foreground="White"/>
+                    <CheckBox Content="Waiting for Customer" Foreground="White"/>
+                    <CheckBox Content="Completed" Foreground="White"/>
+
+                    <DatePicker Margin="0 10 20 0"/>
+
+                </StackPanel>
+            </Border>
+
+            <Grid DockPanel.Dock="Bottom" Margin="5 0 5 15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox  Grid.Column="0"/>
+                <Button Content="Search" Grid.Column="1" Padding="6 0"/>
+
+            </Grid>
+
+
+
+        </DockPanel>
 
         <Grid Background="{StaticResource MaterialDesignDarkBackground}" 
               Margin="25 10 25 25" Grid.Column="1">
             <ScrollViewer>
-                <local:CardListItemControl Margin="5" x:Name="OrderList"/>
+                <!--Cards-->
+                <ItemsControl ItemsSource="{Binding Cards}">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+
+
+                                <Border CornerRadius="8" Background="{StaticResource DarkPurpBrush}"
+                                        Margin="5 5 5 0" >
+                                    <Grid Margin="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <DockPanel Grid.ColumnSpan="2">
+
+                                            <!--Main Text Content-->
+                                            <Grid Margin="18 0 10 0">
+                                                <StackPanel>
+                                                    <Border BorderThickness="0 0 0 2"
+                                            BorderBrush="White"
+                                            Margin="0 0 0 7">
+                                                        <TextBlock Text="{Binding Header}"
+                                                   FontSize="26"
+                                                   FontFamily="Arial"
+                                                   Foreground="White"/>
+                                                    </Border>
+                                                    <TextBlock Text="{Binding Line1}" Margin="0 0 0 5" Foreground="White"/>
+                                                    <TextBlock Text="{Binding Line2}" Foreground="White"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DockPanel>
+
+                                        <!--Option Buttons-->
+                                        <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                            <Button VerticalAlignment="Bottom"
+                                                    Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.ViewCommand}" 
+                                                    CommandParameter="{Binding}">
+                                                <Button.Content>
+                                                    <TextBlock Text="VIEW" FontFamily="{md:MaterialDesignFont}"/>
+                                                </Button.Content>
+                                            </Button>
+
+                                            <Button VerticalAlignment="Bottom"
+                                                    Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                                    Command="{Binding EditCommand}"
+                                                    CommandParameter="{Binding}">
+                                                <Button.Content>
+                                                    <TextBlock Text="EDIT" FontFamily="{md:MaterialDesignFont}"/>
+                                                </Button.Content>
+                                            </Button>
+
+                                            <Button VerticalAlignment="Bottom" Command="{x:Static md:DialogHost.OpenDialogCommand}"
+                                                    Style="{StaticResource MaterialDesignFlatAccentButton}">
+                                                <Button.Content>
+                                                    <TextBlock Text="DELETE" FontFamily="{md:MaterialDesignFont}"/>
+                                                </Button.Content>
+                                                <Button.CommandParameter>
+                                                    <StackPanel Margin="16" Orientation="Vertical">
+                                                        <TextBlock Text="Are you sure you want to delete this?"/>
+                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 0">
+                                                            <Button Style="{StaticResource MaterialDesignFlatAccentButton}">
+                                                                <Button.Content>
+                                                                    <TextBlock Text="YES" FontFamily="{md:MaterialDesignFont}"/>
+                                                                </Button.Content>
+                                                            </Button>
+                                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                                    Command="{x:Static md:DialogHost.CloseDialogCommand}">
+                                                                <Button.Content>
+                                                                    <TextBlock Text="NO" FontFamily="{md:MaterialDesignFont}"/>
+                                                                </Button.Content>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Button.CommandParameter>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
             </ScrollViewer>
         </Grid>
+
     </Grid>
-    
+
 </UserControl>

@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace Precision.View
 {
     /// <summary>
-    /// Interaction logic for OrderListItemControl.xaml
+    /// Interaction logic for CustomerDetailsPage.xaml
     /// </summary>
-    public partial class OrderDetailsPage : UserControl
+    public partial class CustomerEditPage : UserControl
     {
-        public OrderDetailsPage()
+        public CustomerEditPage()
         {
             InitializeComponent();
         }
-
     }
 }

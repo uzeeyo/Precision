@@ -5,11 +5,54 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Precision.View"
              xmlns:vm="clr-namespace:Precision.ViewModel"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="TextBoxToggle" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="False">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TextBox}">
+                                <TextBlock Text="{Binding PriceFormatted}"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <Style x:Key="EditModeToggleButton" BasedOn="{StaticResource MaterialDesignFlatAccentButton}" 
+               TargetType="{x:Type Button}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=DataContext.EditMode, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                             Value="true">
+                    <Setter Property="Content" Value="Save"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=DataContext.EditMode, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                             Value="false">
+                    <Setter Property="Content" Value="Edit"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="EditModeToggle" BasedOn="{StaticResource MaterialDesignFlatAccentButton}" 
+               TargetType="{x:Type Button}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding EditMode}" Value="true">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EditMode}" Value="false">
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
@@ -26,6 +69,21 @@
 
                 <Border BorderThickness="0 0 0 2" BorderBrush="{StaticResource LightGrnBrush}">
                     <DockPanel LastChildFill="False">
+                        <StackPanel DataContext="{Binding Path=DataContext.Customer, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Name: "/>
+                                <TextBlock Text="{Binding FullName}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Phone Number: "/>
+                                <TextBlock Text="{Binding PhoneNumber}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Email: "/>
+                                <TextBlock Text="{Binding EmailAddress}"/>
+                            </StackPanel>
+                        </StackPanel>
+
                         <TextBlock Text="{Binding OrderID}" FontSize="16" DockPanel.Dock="Right"/>
                         <TextBlock Text="Order ID: " FontSize="16" DockPanel.Dock="Right"/>
                     </DockPanel>
@@ -34,35 +92,58 @@
                 <Grid Grid.Row="1" Background="{StaticResource MaterialDesignDarkBackground}">
                     <DockPanel LastChildFill="False">
 
-                        <ListView ItemsSource="{Binding Products}" DockPanel.Dock="Top">
+                        <ListView ItemsSource="{Binding Products}" DockPanel.Dock="Top" >
                             <ListView.View>
                                 <GridView>
 
-                                    <GridViewColumn Width="50">
+                                    <GridViewColumn Width="50" x:Name="DeleteButton">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox/>
+                                                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" 
+                                                    IsEnabled="{Binding Path=DataContext.EditMode, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                                    <Button.Content>
+                                                        <md:PackIcon Kind="Cancel" Height="auto" Width="auto"/>
+                                                    </Button.Content>
+                                                </Button>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Product"/>
                                     <!--<GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Quantity" />-->
-                                    <GridViewColumn DisplayMemberBinding="{Binding PriceFormatted}" Header="Price" />
-                                    <GridViewColumn DisplayMemberBinding="{Binding Tax}" Header="Tax"/>
+                                    <GridViewColumn Header="Price">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Style="{StaticResource TextBoxToggle}" Text="{Binding Price}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Taxed" x:Name="Taxed">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid Width="70">
+                                                    <CheckBox IsChecked="{Binding Taxable}" HorizontalAlignment="Center" 
+                                                              IsEnabled="{Binding Path=DataContext.EditMode, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                              Style="{StaticResource MaterialDesignAccentCheckBox}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
                                 </GridView>
                             </ListView.View>
                         </ListView>
 
-                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
-
-                            <Button Content="Email Inovice" Style="{StaticResource MaterialDesignFlatAccentButton}"/>
-                            <Button Content="Submit Payment" Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                            <Button Content="Add" Style="{StaticResource MaterialDesignFlatLightButton}" Visibility="Hidden"/>
+                            <Button Style="{StaticResource EditModeToggleButton}" d:Content="Edit"
+                                    Command="{Binding EditOrderCommand}" CommandParameter="{Binding EditMode}"/>
+                            <Button Content="Email Inovice" Style="{StaticResource EditModeToggle}"/>
+                            <Button Content="Submit Payment" Style="{StaticResource EditModeToggle}"/>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
                             <TextBlock Text="Total: $" Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
-                            <TextBlock Text="{Binding TotalPrice}" Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
+                            <TextBlock Text="{Binding Path=DataContext.TotalPrice, RelativeSource={RelativeSource AncestorType=UserControl}}" Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
                         </StackPanel>
 
                     </DockPanel>

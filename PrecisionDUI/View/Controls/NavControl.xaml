@@ -8,7 +8,6 @@
              xmlns:vm="clr-namespace:Precision.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="250"
-             DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
              >
 

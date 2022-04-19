@@ -14,21 +14,6 @@
         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
         FontFamily="{md:MaterialDesignFont}">
 
-    <Window.Resources>
-        <DataTemplate DataType="{x:Type vm:OrderListViewModel}">
-            <v:OrderListPage/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:CustomerListViewModel}">
-            <v:CustomerListPage/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:OrderDetailsViewModel}">
-            <v:OrderDetailsPage />
-        </DataTemplate>
-    </Window.Resources>
-    
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
     
     <md:DialogHost>
         <Grid>
@@ -38,7 +23,7 @@
             </Grid.ColumnDefinitions>
 
             <!--Side Navigation Bar-->
-            <v:NavControl Grid.Column="0"/>
+            <v:NavControl Grid.Column="0" DataContext="{Binding ElementName=PageControl, Path=DataContext}"/>
 
             <!--Main View-->
             <Grid Grid.Column="1">
@@ -47,30 +32,13 @@
                 </Grid.RowDefinitions>
 
                 <!--Page View-->
-                <Grid Margin="50">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                <v:PageManager x:Name="PageControl">
+                    <v:PageManager.DataContext>
+                        <vm:PageManagerViewModel/>
+                    </v:PageManager.DataContext>
+                </v:PageManager>
 
-                    <!--Title Bar-->
-                    <Grid>
-                        <Border Background="{StaticResource DarkestPurpBrush}" CornerRadius="25,25,0,0">
-                            <TextBlock Text="{Binding CurrentPageName}" Foreground="White"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
-                        </Border>
-                    </Grid>
 
-                    <!--Current Page-->
-                    <Grid Grid.Row="1" Background="{StaticResource DarkestPurpBrush}">
-                        <ContentControl x:Name="MainContent" Content="{Binding CurrentPage}"/>
-                    </Grid>
-
-                </Grid>
-
-                
             </Grid>
         </Grid>
     </md:DialogHost>
