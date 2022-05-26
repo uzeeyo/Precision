@@ -24,6 +24,35 @@ namespace Precision
     /// </summary>
     public partial class MainWindow : Window
     {
+        private void DockPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
 
+        private void OnCloseButtonClick (object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void OnMinimizeButtonClick (object sender, EventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void OnMaximizeButtonClick (object sender, EventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+                this.ResizeMode = ResizeMode.CanResizeWithGrip;
+            }
+            else if (WindowState == WindowState.Normal)
+            {
+                this.ResizeMode = ResizeMode.NoResize;
+                WindowState = WindowState.Maximized;
+
+            }
+        }
     }
 }

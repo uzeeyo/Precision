@@ -8,39 +8,245 @@
         xmlns:vm="clr-namespace:Precision.ViewModel"
         xmlns:v="clr-namespace:Precision.View"
         mc:Ignorable="d"
-        Title="Precision" Height="800" Width="1400" WindowStyle="None" ResizeMode="NoResize"
+        Title="Precision" Height="800" Width="1400" WindowStyle="None" MinHeight="200" MinWidth="300"
+        AllowsTransparency="True" ResizeMode="CanResizeWithGrip"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource MaterialDesignPaper}"
         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
         FontFamily="{md:MaterialDesignFont}">
 
-    
-    <md:DialogHost>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!--Title Bar-->
+        <DockPanel Background="#FF1F1F1F" LastChildFill="False" MouseLeftButtonDown="DockPanel_MouseLeftButtonDown">
+            <TextBlock DockPanel.Dock="Left" Text="Precision Portal" Foreground="LightGray" Margin="10 7 0 7" FontSize="13"/>
+            <Button Style="{StaticResource MaterialDesignFlatButton}" DockPanel.Dock="Right" Click="OnCloseButtonClick">
+                <Button.Content>
+                    <md:PackIcon Kind="WindowClose" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                </Button.Content>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFlatButton}" DockPanel.Dock="Right" Click="OnMaximizeButtonClick">
+                <Button.Content>
+                    <md:PackIcon Kind="WindowMaximize" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                </Button.Content>
+            </Button>
+            <Button Style="{StaticResource MaterialDesignFlatButton}" DockPanel.Dock="Right" Click="OnMinimizeButtonClick">
+                <Button.Content>
+                    <md:PackIcon Kind="WindowMinimize" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                </Button.Content>
+            </Button>
+        </DockPanel>
+        
+        <md:DialogHost Grid.Row="1">
+            <Grid>
 
-            <!--Side Navigation Bar-->
-            <v:NavControl Grid.Column="0" DataContext="{Binding ElementName=PageControl, Path=DataContext}"/>
+                <!--Side Navigation Bar-->
+                <Grid Width="65" HorizontalAlignment="Left" x:Name="NavPanel" Grid.ZIndex="1">
+                    <StackPanel Background="{DynamicResource PrimaryHueDarkBrush}" x:Name="NavBar" 
+                            DataContext="{Binding ElementName=PageControl, Path=DataContext}">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}">
 
-            <!--Main View-->
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5*"/>
-                </Grid.RowDefinitions>
+                                <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="Height" Value="50"/>
 
-                <!--Page View-->
-                <v:PageManager x:Name="PageControl">
-                    <v:PageManager.DataContext>
-                        <vm:PageManagerViewModel/>
-                    </v:PageManager.DataContext>
-                </v:PageManager>
+                            </Style>
 
+                        </StackPanel.Resources>
+
+                        <!--Logo-->
+                        <Grid Height="50">
+                            <ToggleButton BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Right" IsChecked="False"
+                                          Height="60" Width="60" Background="Transparent" x:Name="MenuButton">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Grid Background="{TemplateBinding Background}">
+                                            <ContentPresenter Content="{TemplateBinding Property=Button.Content}" VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                                          HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                                          Margin="0" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}">
+
+                                            </ContentPresenter>
+                                        </Grid>
+                                        
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                                <ToggleButton.Content>
+                                    <md:PackIcon Kind="Menu" Foreground="LightGray" Height="60" Width="40" HorizontalAlignment="Center"/>
+
+                                </ToggleButton.Content>
+                                <ToggleButton.Triggers>
+                                    <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                                        <BeginStoryboard>
+                                            <Storyboard x:Name="HideNav">
+                                                <DoubleAnimation 
+                                                Storyboard.TargetName="NavPanel" Storyboard.TargetProperty="Width"
+                                                BeginTime="0:0:0"
+                                                From="200" To="65"
+                                                Duration="0:0:0.2">
+
+
+                                                </DoubleAnimation>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="MainView" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                    BeginTime="0:0:0"
+                                                    From="#B9000000" To="#00000000"
+                                                    Duration="0:0:0.3">
+
+                                                </ColorAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="ToggleButton.Checked">
+                                        <BeginStoryboard>
+                                            <Storyboard x:Name="ShowNav">
+                                                <DoubleAnimation 
+                                                Storyboard.TargetName="NavPanel" Storyboard.TargetProperty="Width"
+                                                BeginTime="0:0:0"
+                                                From="65" To="200"
+                                                Duration="0:0:0.2">
+
+                                                </DoubleAnimation>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="MainView" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                                                    BeginTime="0:0:0"
+                                                    From="#00000000" To="#B9000000"
+                                                    Duration="0:0:0.3">
+
+                                                </ColorAnimation>
+
+                                            </Storyboard>
+                                        </BeginStoryboard>
+
+                                    </EventTrigger>
+                                </ToggleButton.Triggers>
+                            </ToggleButton>
+                        </Grid>
+
+
+                        <Image Source="/Images/logo.png" Height="80"
+                   HorizontalAlignment="Center" Margin="10 20"/>
+
+                        <Button CommandParameter="Customers" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" >
+                                    <md:PackIcon Kind="AccountOutline" VerticalAlignment="Center" Height="32" 
+                                Foreground="White" Width="32"/>
+                                    <TextBlock Text="Customers" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <Button CommandParameter="Orders" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" >
+                                    <md:PackIcon Kind="ArchiveOutline" VerticalAlignment="Center" Height="32"
+                                Foreground="White" Width="32"/>
+                                    <TextBlock Text="Orders" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <Button CommandParameter="Messages" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" >
+                                    <md:PackIcon Kind="MessageOutline" VerticalAlignment="Center" Height="32"
+                                Foreground="White" Width="32"/>
+                                    <TextBlock Text="Messages" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <Button CommandParameter="Invoices" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" >
+                                    <md:PackIcon Kind="Paper" VerticalAlignment="Center" Height="32"
+                                Foreground="White" Width="32"/>
+                                    <TextBlock Text="Invoices" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
+                        <Button CommandParameter="Quotes" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal" >
+                                    <md:PackIcon Kind="CommentQuestionOutline" VerticalAlignment="Center" Height="32"
+                                Foreground="White" Width="32"/>
+                                    <TextBlock Text="Quotes" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+                
+
+                <!--Main View-->
+                <Grid>
+                    
+                    <Grid Margin="20 0 0 0" Background="Transparent">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5*"/>
+                        </Grid.RowDefinitions>
+
+                        <!--Page View-->
+                        <v:PageManager x:Name="PageControl">
+                            <v:PageManager.DataContext>
+                                <vm:PageManagerViewModel/>
+                            </v:PageManager.DataContext>
+                        </v:PageManager>
+                        
+                        <Grid x:Name="MainView" Background="Transparent" Panel.ZIndex="0">
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Setter Property="IsHitTestVisible" Value="True"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsChecked, ElementName=MenuButton}" Value="False">
+                                            <Setter Property="IsHitTestVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+                            <Grid.Triggers>
+                                <EventTrigger RoutedEvent="Grid.MouseLeftButtonDown">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <BooleanAnimationUsingKeyFrames
+                                                Storyboard.TargetName="MenuButton" Storyboard.TargetProperty="IsChecked">
+                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0.1" Value="False"/>
+                                            </BooleanAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Grid.Triggers>
+                            <TextBlock/>
+
+                        </Grid>
+
+                    </Grid>
+                </Grid>
+                
 
             </Grid>
-        </Grid>
-    </md:DialogHost>
+        </md:DialogHost>
+    </Grid>
+    
     
 </Window>
