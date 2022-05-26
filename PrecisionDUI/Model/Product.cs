@@ -4,18 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Collections.ObjectModel;
 
 namespace Precision.Model
 {
     public class Product : BaseModel
     {
-        private int _id;
-        private int _categoryID;
-        private string _name;
         private decimal _price;
-        private bool _taxable;
 
         public int ProductID { get; set; }
+        public int EntryID { get; set; }
         public int CategoryID { get; set; }
         public string Name { get; set; }
         public decimal Price

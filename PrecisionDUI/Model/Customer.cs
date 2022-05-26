@@ -4,6 +4,11 @@ namespace Precision.Model
 {
     public class Customer : BaseModel
     {
+        public Customer()
+        {
+            Address = new Address();
+        }
+
         #region Private Fields
 
         private int _customerID;
@@ -11,6 +16,7 @@ namespace Precision.Model
         private string _lastName;
         private string _phoneNumber;
         private string _emailAddress;
+        private Address _address;
 
         #endregion
 
@@ -31,6 +37,7 @@ namespace Precision.Model
             {
                 if (value != _firstName) { _firstName = value; }
                 OnPropertyChanged(nameof(FirstName));
+                OnPropertyChanged(nameof(FullName));
             }
         }
         public string LastName 
@@ -40,6 +47,8 @@ namespace Precision.Model
             {
                 if (value != _lastName) { _lastName = value; }
                 OnPropertyChanged(nameof(LastName));
+                OnPropertyChanged(nameof(FullName));
+
             }
         }
         public string PhoneNumber
@@ -49,6 +58,7 @@ namespace Precision.Model
             {
                 if (value != _phoneNumber) { _phoneNumber = value; }
                 OnPropertyChanged(nameof(PhoneNumber));
+                OnPropertyChanged(nameof(PhoneNumberFormatted));
             }
         }
         public string EmailAddress
@@ -60,10 +70,20 @@ namespace Precision.Model
                 OnPropertyChanged(nameof(EmailAddress));
             }
         }
+        public Address Address
+        {
+            get { return _address; }
+            set
+            {
+                if (value != _address) { _address = value; }
+                OnPropertyChanged(nameof(Address));
+                OnPropertyChanged(nameof(AddressFormatted));
+            }
+        }
 
         public string FullName { get { return $"{_firstName} {_lastName}"; } }
-
         public string PhoneNumberFormatted { get { return FormatNumber(_phoneNumber); } }
+        public string AddressFormatted { get { return $"{Address.Street}, {Address.City} {Address.State} {Address.ZipCode}"; } }
 
 
         #endregion

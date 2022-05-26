@@ -2,7 +2,7 @@
 
 namespace Precision
 {
-    class Device
+    public class Device
     {
         #region Private Fields
         private int _deviceID;
