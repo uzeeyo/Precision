@@ -19,6 +19,12 @@
         <DataTemplate DataType="{x:Type vm:OrderDetailsViewModel}">
             <v:OrderDetailsPage />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomerDetailsViewModel}">
+            <v:CustomerDetailsPage/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CustomerEditViewModel}">
+            <v:CustomerEditPage/>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid Margin="50">
@@ -29,16 +35,17 @@
 
         <!--Title Bar-->
         <Grid>
-            <Border Background="{StaticResource DarkestPurpBrush}" CornerRadius="25,25,0,0">
-                <TextBlock Text="{Binding CurrentPageName}" Foreground="White"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+            <Border CornerRadius="25,25,0,0">
+                <TextBlock Text="{Binding CurrentPageName}" Foreground="{DynamicResource MaterialDesignDarkForeground}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Margin="25 0"
+                           Style="{StaticResource MaterialDesignHeadline6TextBlock}"/>
             </Border>
         </Grid>
 
         <!--Page Manager-->
-        <Grid Grid.Row="1" Background="{StaticResource DarkestPurpBrush}">
+        <Grid Grid.Row="1">
             <ContentControl Content="{Binding CurrentPage}"/>
         </Grid>
 
