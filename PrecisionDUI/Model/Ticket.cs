@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Precision.Model
 {
-    public class Ticket
+    public class Ticket : ObservableObject
     {
         public Ticket()
         {
@@ -18,6 +16,7 @@ namespace Precision.Model
         public int InvoiceID;
         public List<Note> Notes { get; set; }
         public DateTime DateCreated { get; set; }
+        public string Description { get; set; }
 
 
     }

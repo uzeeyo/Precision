@@ -13,18 +13,26 @@ namespace Precision.ViewModel
     {
         public PageManagerViewModel()
         {
-            Pages = new List<IPageViewModel>();
-            Pages.Add(new OrderListViewModel(this));
-            Pages.Add(new CustomerListViewModel(this));
             CurrentPageName = "Home";
+            _instance = this;
         }
 
         #region Private Fields
 
-        static ICommand _changePage;
-        static ICommand _viewCommand;
-        static IPageViewModel _currentPage;
-        static string _pageName;
+        private ICommand _changePage;
+        private static IPageViewModel _currentPage;
+        private string _pageName;
+        private static PageManagerViewModel _instance;
+        private Dictionary<string, Func<IPageViewModel>> _pages = new Dictionary<string, Func<IPageViewModel>>()
+        {
+            { "Home", () => _currentPage = null },
+            { "Customers", () => new CustomerListViewModel(_instance) },
+            { "Orders", () => new OrderListViewModel(_instance) },
+            { "Messages", () => null },
+            { "Invoices", ()  => null },
+            { "Quotes", () => null }
+
+        };
 
         #endregion
 
@@ -52,7 +60,6 @@ namespace Precision.ViewModel
             }
         }
 
-        public List<IPageViewModel> Pages { get; set; }
         public ICommand ChangePage
         {
             get
@@ -60,23 +67,21 @@ namespace Precision.ViewModel
                 if (_changePage == null)
                 {
                     _changePage = new RelayCommand(
-                        p => ChangePageViewModel(Pages.Where(x => x.PageName == (string)p).FirstOrDefault()),
+                        p => ChangePageViewModel((string)p),
                         p => (string)p != CurrentPageName
                         );
                 }
                 return _changePage;
             }
         }
-
-
-
-
         #endregion
-        public void ChangePageViewModel(IPageViewModel page) => PageChanger(page);
-
-        //private void OpenOrderDetails(Card c) => this.PageChanger(new OrderDetailsViewModel(c));
-        //private void OpenCustomerEdit(Card c) => this.PageChanger(new CustomerEditViewModel(c));
-
+        
+        private void ChangePageViewModel(string pageName)
+        {
+            IPageViewModel nextPage = _pages[pageName]();
+            PageChanger(nextPage);
+        }
+        
         public void PageChanger(IPageViewModel page)
         {
             CurrentPage = page;

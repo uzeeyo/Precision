@@ -3,7 +3,9 @@
                     xmlns:local="clr-namespace:Precision">
     
     <Style TargetType="{x:Type TextBlock}">
-        <Setter Property="FontFamily" Value="Arial"/>
+        <Setter Property="FontFamily" Value="Fonts/Roboto-Regular.ttf"/>
+        <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}"/>
+
     </Style>
 
 </ResourceDictionary>

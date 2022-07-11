@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Precision.Model
 {
@@ -83,7 +84,18 @@ namespace Precision.Model
 
         public string FullName { get { return $"{_firstName} {_lastName}"; } }
         public string PhoneNumberFormatted { get { return FormatNumber(_phoneNumber); } }
-        public string AddressFormatted { get { return $"{Address.Street}, {Address.City} {Address.State} {Address.ZipCode}"; } }
+        public string AddressFormatted 
+        { 
+            get 
+            {
+                if (Address.AddressID != null)
+                {
+                    return $"{Address.Street}, {Address.City} {Address.State} {Address.ZipCode}";
+                }
+                else { return "N/A"; }
+
+            } 
+        }
 
 
         #endregion

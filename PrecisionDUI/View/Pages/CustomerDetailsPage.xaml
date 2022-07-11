@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="Precision.View.CustomerDetailsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:Precision.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:Background="{StaticResource MaterialDesignDarkBackground}">
+    <UserControl.Resources>
+        
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid Margin="25 10 25 25">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Margin="0 0 15 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <md:Card Grid.Row="0" Margin="0 0 0 15">
+                    <Grid DataContext="{Binding CustomerDetails}">
+                        <Grid.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="14"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <StackPanel Margin="15 15 0 0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Name: " FontWeight="Bold" Foreground="{DynamicResource SecondaryHueMidBrush}"/>
+                                <TextBlock Text="{Binding FullName}" Foreground="{StaticResource MaterialDesignDarkForeground}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Phone Number: " FontWeight="Bold" Foreground="{DynamicResource SecondaryHueMidBrush}"/>
+                                <TextBlock Text="{Binding PhoneNumberFormatted}" Foreground="{StaticResource MaterialDesignDarkForeground}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Email: " FontWeight="Bold" Foreground="{DynamicResource SecondaryHueMidBrush}"/>
+                                <TextBlock Text="{Binding EmailAddress}" Foreground="{StaticResource MaterialDesignDarkForeground}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Address: " FontWeight="Bold" Foreground="{DynamicResource SecondaryHueMidBrush}"/>
+                                <TextBlock Text="{Binding AddressFormatted}" Foreground="{StaticResource MaterialDesignDarkForeground}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </md:Card>
+
+                <md:Card Grid.Row="1">
+                    
+                </md:Card>
+                
+            </Grid>
+            
+
+            <md:Card Grid.Column="1">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Style="{StaticResource MaterialDesignFlatAccentButton}" Content="Tickets"/>
+                        <Border BorderBrush="#3F000000" BorderThickness="2 0 0 0" Grid.Column="1" Margin="0 5"/>
+                        <Button Grid.Column="2" Style="{StaticResource MaterialDesignFlatAccentButton}" Content="Messages"/>
+                    </Grid>
+
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <!--<ContentControl Content="{Binding CurrentTab}"/>-->
+                        <ItemsControl ItemsSource="{Binding Tickets}" Margin="10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <md:Card Margin="10" Background="#5e5e5e">
+                                        <DockPanel>
+                                            <StackPanel Margin="15" MinHeight="50" DockPanel.Dock="Top">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Ticket #: "/>
+                                                    <TextBlock Text="{Binding TicketID}"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Devices: " Margin="0 8 0 0"/>
+                                                    <ItemsControl ItemsSource="{Binding Devices}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+
+                                                                </StackPanel>
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <md:Chip Height="auto" IsEnabled="False" Background="{DynamicResource SecondaryHueMidBrush}">
+                                                                    <md:Chip.Content>
+                                                                        <TextBlock Text="{Binding Model}" Margin="0 3" FontSize="12" Foreground="{DynamicResource MaterialDesignLightForeground}"/>
+                                                                    </md:Chip.Content>
+                                                                </md:Chip>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Note: "/>
+                                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <Button Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                                    <Button.Content>
+                                                        <md:PackIcon Kind="Menu" Foreground="{DynamicResource PrimaryHueLightBrush}"/>
+                                                    </Button.Content>
+                                                </Button>
+                                            </StackPanel>
+                                            </StackPanel>
+                                        </DockPanel>
+
+
+                                    </md:Card>
+
+
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                </Grid>
+            </md:Card>
+            
+            
+        </Grid>
+            
+    </Grid>
+</UserControl>

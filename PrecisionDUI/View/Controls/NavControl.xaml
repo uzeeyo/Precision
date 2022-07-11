@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Precision.View"
              xmlns:vm="clr-namespace:Precision.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="250"
+             d:DesignHeight="800" d:DesignWidth="50"
              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
              >
 
@@ -22,84 +22,82 @@
         </StackPanel.Resources>
 
         <!--Logo-->
-        <Image Source="/Images/logo.png"
-                   Height="80"
-                   HorizontalAlignment="Left"
-                   Margin="20,20,0,100"/>
+        <Grid Height="50">
+            <ToggleButton Height="50" Width="50"
+                      BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <ToggleButton.Content>
+                    <md:PackIcon Kind="Menu"  Foreground="LightGray" Margin="20 0"/>
+                </ToggleButton.Content>
+            </ToggleButton>
+        </Grid>
+        
+        
+        <Image Source="/Images/logo.png" Height="80"
+                   HorizontalAlignment="Left" Margin="20,20,0,100"/>
+        
+        <Button CommandParameter="Customers" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal" >
+                    <md:PackIcon Kind="AccountOutline" VerticalAlignment="Center" Height="32" 
+                                Foreground="White" Width="32"/>
+                    <TextBlock Text="Customers" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
 
-        <StackPanel Orientation="Horizontal">
-            <Button CommandParameter="Orders" Command="{Binding ChangePage}" 
-                            Width="{Binding ElementName=NavBar, Path=ActualWidth}"
-                            HorizontalContentAlignment="Left">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal" >
-                        <md:PackIcon Kind="ArchiveOutline" VerticalAlignment="Center" Height="32"
-                                   Foreground="White" Width="32"/>
-                        <TextBlock Text="Orders" VerticalAlignment="Center" Margin="10 0 0 0"
-                                   Foreground="White"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </StackPanel>
+        <Button CommandParameter="Orders" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal" >
+                    <md:PackIcon Kind="ArchiveOutline" VerticalAlignment="Center" Height="32"
+                                Foreground="White" Width="32"/>
+                    <TextBlock Text="Orders" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
 
-        <StackPanel Orientation="Horizontal">
-            <Button CommandParameter="Customers" Command="{Binding ChangePage}" 
-                            Width="{Binding ElementName=NavBar, Path=ActualWidth}"
-                            HorizontalContentAlignment="Left">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal" >
-                        <md:PackIcon Kind="AccountOutline" VerticalAlignment="Center" Height="32" 
-                                   Foreground="White" Width="32"/>
-                        <TextBlock Text="Customers" VerticalAlignment="Center" Margin="10 0 0 0"
-                                   Foreground="White"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </StackPanel>
+        <Button CommandParameter="Messages" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal" >
+                    <md:PackIcon Kind="MessageOutline" VerticalAlignment="Center" Height="32"
+                                Foreground="White" Width="32"/>
+                    <TextBlock Text="Messages" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
 
-        <StackPanel Orientation="Horizontal">
-            <Button CommandParameter="Messages" Command="{Binding ChangePage}" 
-                            Width="{Binding ElementName=NavBar, Path=ActualWidth}"
-                            HorizontalContentAlignment="Left">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal" >
-                        <md:PackIcon Kind="MessageOutline" VerticalAlignment="Center" Height="32"
-                                   Foreground="White" Width="32"/>
-                        <TextBlock Text="Messages" VerticalAlignment="Center" Margin="10 0 0 0"
-                                   Foreground="White"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </StackPanel>
+        <Button CommandParameter="Invoices" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal" >
+                    <md:PackIcon Kind="Paper" VerticalAlignment="Center" Height="32"
+                                Foreground="White" Width="32"/>
+                    <TextBlock Text="Invoices" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
 
-        <StackPanel Orientation="Horizontal">
-            <Button CommandParameter="Devices" Command="{Binding ChangePage}" 
-                            Width="{Binding ElementName=NavBar, Path=ActualWidth}"
-                            HorizontalContentAlignment="Left">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal" >
-                        <md:PackIcon Kind="Cellphone" VerticalAlignment="Center" Height="32"
-                                   Foreground="White" Width="32"/>
-                        <TextBlock Text="Devices" VerticalAlignment="Center" Margin="10 0 0 0"
-                                   Foreground="White"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+        <Button CommandParameter="Quotes" Command="{Binding ChangePage}" 
+                        Width="{Binding ElementName=NavBar, Path=ActualWidth}"
+                        HorizontalContentAlignment="Left">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal" >
+                    <md:PackIcon Kind="CommentQuestionOutline" VerticalAlignment="Center" Height="32"
+                                Foreground="White" Width="32"/>
+                    <TextBlock Text="Quotes" VerticalAlignment="Center" Margin="10 0 0 0"
+                                Foreground="White"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
         </StackPanel>
-
-        <StackPanel Orientation="Horizontal">
-            <Button CommandParameter="Quotes" Command="{Binding ChangePage}" 
-                            Width="{Binding ElementName=NavBar, Path=ActualWidth}"
-                            HorizontalContentAlignment="Left">
-                <Button.Content>
-                    <StackPanel Orientation="Horizontal" >
-                        <md:PackIcon Kind="CommentQuestionOutline" VerticalAlignment="Center" Height="32"
-                                   Foreground="White" Width="32"/>
-                        <TextBlock Text="Quotes" VerticalAlignment="Center" Margin="10 0 0 0"
-                                   Foreground="White"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-        </StackPanel>
-    </StackPanel>
 </UserControl>

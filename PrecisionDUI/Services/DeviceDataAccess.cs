@@ -13,7 +13,7 @@ namespace Precision.Services
         {
             var query = "SELECT * FROM Devices";
             var devices = new List<Device>();
-            var conn = DataAccessBase.conString;
+            var conn = DataAccess.ConnectionString;
             using (var cmd = new SqlCommand(query, conn))
             {
                 try
@@ -46,7 +46,7 @@ namespace Precision.Services
             var query = "SELECT Devices.DeviceID, Devices.CustomerID, Devices.Make, Devices.Model, Devices.OSType FROM Devices" +
                         "WHERE Devices.CustomerID = @id";
             var devices = new List<Device>();
-            var conn = DataAccessBase.conString;
+            var conn = DataAccess.ConnectionString;
             using (var cmd = new SqlCommand(query, conn))
             {
                 try
@@ -87,7 +87,7 @@ namespace Precision.Services
         public static void RemoveDevice(int id)
         {
             string query = "DELETE FROM Devices WHERE Devices.CustomerID = @id";
-            var conn = DataAccessBase.conString;
+            var conn = DataAccess.ConnectionString;
             using (var cmd = new SqlCommand(query, conn))
             {
                 try

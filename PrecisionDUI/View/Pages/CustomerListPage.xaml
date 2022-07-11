@@ -7,138 +7,128 @@
              xmlns:vm="clr-namespace:Precision.ViewModel"
              xmlns:local="clr-namespace:Precision.View"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    
-    <Grid Background="{StaticResource DarkestPurpBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="4*"/>
-        </Grid.ColumnDefinitions>
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:Background="{StaticResource MaterialDesignDarkBackground}">
 
-        <DockPanel Background="{StaticResource DarkestPurpBrush}" LastChildFill="False">
-            <Border DockPanel.Dock="Top" Margin="15 15 15 0">
-                <StackPanel>
-                    <TextBlock Text="Sort by" Foreground="White"/>
-                    <RadioButton GroupName="SortByGroup" Content="Name" Foreground="White"/>
-                    <RadioButton GroupName="SortByGroup" Content="Creation Date" Foreground="White"/>
 
-                    <TextBlock Text="Filter" Foreground="White" Margin="0 15 0 0"/>
-                    <CheckBox Content="In Progress" Foreground="White"/>
-                    <CheckBox Content="Waiting for Parts" Foreground="White"/>
-                    <CheckBox Content="Waiting for Customer" Foreground="White"/>
-                    <CheckBox Content="Completed" Foreground="White"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
 
-                    <DatePicker Margin="0 10 20 0"/>
-
-                </StackPanel>
-            </Border>
-
-            <Grid DockPanel.Dock="Bottom" Margin="5 0 5 15">
+        <md:Card Grid.Row="0" Margin="20">
+            <Grid Margin="20 30">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-                <TextBox  Grid.Column="0"/>
-                <Button Content="Search" Grid.Column="1" Padding="6 0"/>
+                <TextBlock Text="SEARCH" FontSize="16" FontWeight="Bold" Margin="0 0 0 10" Foreground="{StaticResource LightGrnBrush}"/>
 
+                <TextBlock Text="Name:" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Bottom" Grid.Row="1" Margin="0 0 0 20"/>
+                <TextBox Grid.Column="1" Margin="0 0 80 20" Grid.Row="1" Text="{Binding NameSearchBox, UpdateSourceTrigger=PropertyChanged}"  Foreground="{DynamicResource MaterialDesignDarkForeground}">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="TextChanged">
+                            <b:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </TextBox>
+                <TextBlock Text="Email:" FontWeight="Bold" Grid.Column="2" VerticalAlignment="Bottom" Grid.Row="1" Margin="0 0 0 20"/>
+                <TextBox Grid.Column="3" Margin="0 0 80 20" Grid.Row="1" Text="{Binding EmailSearchBox, UpdateSourceTrigger=PropertyChanged}"  Foreground="{DynamicResource MaterialDesignDarkForeground}">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="TextChanged">
+                            <b:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </TextBox>
+
+                <TextBlock Text="Phone:" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Bottom" Grid.Row="2" Margin="0 0 0 0"/>
+                <TextBox Grid.Column="1" Margin="0 0 80 0" Grid.Row="2" Text="{Binding PhoneSearchBox, UpdateSourceTrigger=PropertyChanged}"  Foreground="{DynamicResource MaterialDesignDarkForeground}">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="TextChanged">
+                            <b:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </TextBox>
             </Grid>
+        </md:Card>
 
 
+        <md:Card Grid.Row="1" Margin="20">
+            <Grid Margin="20">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding FilteredCustomers}" x:Name="Items">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    
+                                    <Border BorderBrush="#3F000000" BorderThickness="0 0 0 2" Margin="5 5 5 0" >
+                                        <Grid Margin="10 10 10 20">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <DockPanel Grid.ColumnSpan="2">
 
-        </DockPanel>
-
-        <Grid Background="{StaticResource MaterialDesignDarkBackground}" 
-              Margin="25 10 25 25" Grid.Column="1">
-            <ScrollViewer>
-                <ItemsControl ItemsSource="{Binding Cards}">
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-
-
-                                <Border CornerRadius="8" Background="{StaticResource DarkPurpBrush}"
-                                        Margin="5 5 5 0" >
-                                    <Grid Margin="10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <DockPanel Grid.ColumnSpan="2">
-
-                                            <!--Main Text Content-->
-                                            <Grid Margin="18 0 10 0">
-                                                <StackPanel>
-                                                    <Border BorderThickness="0 0 0 2"
-                                            BorderBrush="White"
-                                            Margin="0 0 0 7">
-                                                        <TextBlock Text="{Binding Header}"
-                                                   FontSize="26"
-                                                   FontFamily="Arial"
-                                                   Foreground="White"/>
-                                                    </Border>
-                                                    <TextBlock Text="{Binding Line1}" Margin="0 0 0 5" Foreground="White"/>
-                                                    <TextBlock Text="{Binding Line2}" Foreground="White"/>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DockPanel>
-
-                                        <!--Option Buttons-->
-                                        <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                            <Button VerticalAlignment="Bottom"
-                                                    Style="{StaticResource MaterialDesignFlatAccentButton}"
-                                                    Command="{Binding Path=DataContext.ViewCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                                    CommandParameter="{Binding}">
-                                                <Button.Content>
-                                                    <TextBlock Text="VIEW" FontFamily="{md:MaterialDesignFont}"/>
-                                                </Button.Content>
-                                            </Button>
-
-                                            <Button VerticalAlignment="Bottom"
-                                                    Style="{StaticResource MaterialDesignFlatAccentButton}"
-                                                    Command="{Binding EditCommand}"
-                                                    CommandParameter="{Binding}">
-                                                <Button.Content>
-                                                    <TextBlock Text="EDIT" FontFamily="{md:MaterialDesignFont}"/>
-                                                </Button.Content>
-                                            </Button>
-
-                                            <Button VerticalAlignment="Bottom" Command="{x:Static md:DialogHost.OpenDialogCommand}"
-                                                    Style="{StaticResource MaterialDesignFlatAccentButton}">
-                                                <Button.Content>
-                                                    <TextBlock Text="DELETE" FontFamily="{md:MaterialDesignFont}"/>
-                                                </Button.Content>
-                                                <Button.CommandParameter>
-                                                    <StackPanel Margin="16" Orientation="Vertical">
-                                                        <TextBlock Text="Are you sure you want to delete this?"/>
-                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 0">
-                                                            <Button Style="{StaticResource MaterialDesignFlatAccentButton}">
-                                                                <Button.Content>
-                                                                    <TextBlock Text="YES" FontFamily="{md:MaterialDesignFont}"/>
-                                                                </Button.Content>
-                                                            </Button>
-                                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
-                                                                    Command="{x:Static md:DialogHost.CloseDialogCommand}">
-                                                                <Button.Content>
-                                                                    <TextBlock Text="NO" FontFamily="{md:MaterialDesignFont}"/>
-                                                                </Button.Content>
-                                                            </Button>
-                                                        </StackPanel>
+                                                <!--Main Text Content-->
+                                                <Grid Margin="15 0 10 0">
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding FullName}" FontSize="26" FontFamily="Fonts/Roboto-Regular.ttf"
+                                                            Foreground="White" Margin="0 0 0 7"/>
+                                                        <TextBlock Text="{Binding PhoneNumberFormatted}" Margin="20 0 0 5" Foreground="White"/>
+                                                        <TextBlock Text="{Binding EmailAddress}" Margin="20 0 0 0" Foreground="White"/>
                                                     </StackPanel>
-                                                </Button.CommandParameter>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                                </Grid>
+                                            </DockPanel>
 
-            </ScrollViewer>
-        </Grid>
-            
+                                            <!--Option Buttons-->
+                                            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                                                <Button VerticalAlignment="Bottom"
+                                                    Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                                    Command="{Binding Path=DataContext.ViewCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                                                    CommandParameter="{Binding}">
+                                                    <Button.Content>
+                                                        <TextBlock Text="VIEW" FontFamily="{md:MaterialDesignFont}" Foreground="{DynamicResource SecondaryHueMidBrush}"/>
+                                                    </Button.Content>
+                                                </Button>
+
+                                                <Button VerticalAlignment="Bottom"
+                                                    Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                                    Command="{Binding Path=DataContext.EditCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}">
+                                                    <Button.Content>
+                                                        <TextBlock Text="EDIT" FontFamily="{md:MaterialDesignFont}" Foreground="{DynamicResource SecondaryHueMidBrush}"/>
+                                                    </Button.Content>
+                                                </Button>
+
+                                                <Button VerticalAlignment="Bottom" 
+                                                        Command="{Binding Path=DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                        CommandParameter="{Binding}"
+                                                    Style="{StaticResource MaterialDesignFlatAccentButton}">
+                                                    <Button.Content>
+                                                        <TextBlock Text="DELETE" FontFamily="{md:MaterialDesignFont}" Foreground="{DynamicResource SecondaryHueMidBrush}"/>
+                                                    </Button.Content>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </md:Card>
     </Grid>
+
 </UserControl>

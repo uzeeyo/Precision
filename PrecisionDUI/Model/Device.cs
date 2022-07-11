@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Precision
 {
-    public class Device
+    public class Device : ObservableObject
     {
         #region Private Fields
         private int _deviceID;

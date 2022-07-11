@@ -8,32 +8,59 @@ using System.Collections.ObjectModel;
 
 namespace Precision.Model
 {
-    public class Product : BaseModel
+    public class Product : ObservableObject
     {
-        private decimal _price;
+        private decimal? _changedPrice;
+        private decimal _finalPrice;
+        private bool _taxable;
 
         public int ProductID { get; set; }
         public int EntryID { get; set; }
         public int CategoryID { get; set; }
         public string Name { get; set; }
-        public decimal Price
+        public decimal Price { get; set; }
+
+        public decimal? ChangedPrice
         {
-            get { return Math.Round(_price,2); }
+            get => _changedPrice ?? Price;
             set
             {
-                if (_price != value)
+                if (_changedPrice != value)
                 {
-                    _price = value;
+                    _changedPrice = value;
                 }
+                OnPropertyChanged(nameof(ChangedPrice));
+                OnPropertyChanged(nameof(FinalPrice));
+                OnPropertyChanged(nameof(Tax));
             }
 
         }
-        public bool Taxable { get; set; }
-        public string PriceFormatted
+
+        public decimal FinalPrice
         {
             get
             {
-                return $"{Price:C}";
+                _finalPrice = ChangedPrice ?? Price;
+                return _finalPrice;
+            }
+        }
+
+        public decimal? Tax
+        {
+            get { return Taxable ? Decimal.Multiply(FinalPrice, (decimal)0.07) : 0; }
+        }
+
+        public bool Taxable
+        {
+            get => _taxable;
+            set
+            {
+                if (_taxable != value)
+                {
+                    _taxable = value;
+                }
+                OnPropertyChanged(nameof(Taxable));
+                OnPropertyChanged(nameof(Tax));
             }
         }
     }

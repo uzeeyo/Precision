@@ -15,13 +15,13 @@ namespace Precision.Services
 
         public static List<Customer> GetAllCustomers()
         {
-            string query = "SELECT * FROM Customers";
+            string query = "SELECT * FROM Customers WHERE ArchivedAt IS NULL";
             var customers = new List<Customer>();
-            using (var cmd = new SqlCommand(query, DataAccessBase.conString))
+            using (var cmd = new SqlCommand(query, DataAccess.ConnectionString))
             {
                 try
                 {
-                    DataAccessBase.conString.Open();
+                    DataAccess.ConnectionString.Open();
                     var reader = cmd.ExecuteReader();
 
                     if (reader.HasRows)
@@ -39,40 +39,61 @@ namespace Precision.Services
                     }
                     else
                     {
-                        MessageBox.Show("No data was found.");
+                        DataAccess.ShowSqlErrorDialog();
                     }
                 }
                 catch (Exception ex)
                 {
                     string error = ex.Message;
-                    MessageBox.Show(error);
+                    DataAccess.ShowSqlErrorDialog();
                 }
                 finally
                 {
-                    DataAccessBase.conString.Close();
+                    DataAccess.ConnectionString.Close();
                 }
                 return customers;
             }
 
         }
 
-        public static Customer GetCustomerByID(int customerID)
+        public static Customer GetCustomerDetailsByID(int customerID)
         {
-            string query = "SELECT * FROM Customers WHERE CustomerID = @id";
+            string query = "SELECT * FROM Customers " +
+                           "LEFT JOIN Addresses ON Customers.AddressID = Addresses.AddressID " +
+                           "WHERE Customers.CustomerID = @id";
             var customer = new Customer();
 
-            using (var cmd = new SqlCommand(query, DataAccessBase.conString))
+            using (var cmd = new SqlCommand(query, DataAccess.ConnectionString))
             {
-                cmd.Parameters.AddWithValue("@id", customerID);
-                var reader = cmd.ExecuteReader();
-                if (reader.Read())
+                try
                 {
-                    customer.CustomerID = (int)reader["ID"];
-                    customer.FirstName = (string)reader["FirstName"];
-                    customer.LastName = (string)reader["LastName"];
-                    customer.PhoneNumber = (string)reader["PhoneNumber"];
-                    customer.EmailAddress = (string)reader["EmailAddress"];
+                    DataAccess.ConnectionString.Open();
+                    cmd.Parameters.AddWithValue("@id", customerID);
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        customer.CustomerID = (int)reader["CustomerID"];
+                        customer.FirstName = (string)reader["FirstName"];
+                        customer.LastName = (string)reader["LastName"];
+                        customer.PhoneNumber = (string)reader["PhoneNumber"];
+                        customer.EmailAddress = DataAccess.ConvertFromDBVal<string>(reader["EmailAddress"]);
+                        customer.Address.AddressID = DataAccess.ConvertFromDBVal<int?>(reader["AddressID"]);
+                        if (customer.Address.AddressID != null)
+                        {
+                            customer.Address.Street = (string)reader["Street"];
+                            customer.Address.City = (string)reader["City"];
+                            customer.Address.State = (string)reader["State"];
+                            customer.Address.ZipCode = (int)reader["ZipCode"];
+                        }
+                    }
                 }
+                catch (SqlException ex)
+                {
+                    var error = ex.Message;
+                    DataAccess.ShowSqlErrorDialog();
+                }
+                finally { DataAccess.ConnectionString.Close(); }
+                
             }
             return customer;
         }
@@ -84,11 +105,11 @@ namespace Precision.Services
                            "WHERE Orders.OrderID = @id";
             var customer = new Customer();
 
-            using (SqlCommand cmd = new SqlCommand(query, DataAccessBase.conString))
+            using (SqlCommand cmd = new SqlCommand(query, DataAccess.ConnectionString))
             {
                 try
                 {
-                    DataAccessBase.conString.Open();
+                    DataAccess.ConnectionString.Open();
                     cmd.Parameters.AddWithValue("@id", orderID);
                     var reader = cmd.ExecuteReader();
                     if (reader.Read())
@@ -103,10 +124,11 @@ namespace Precision.Services
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
+                    DataAccess.ShowSqlErrorDialog();
                 }
                 finally
                 {
-                    DataAccessBase.conString.Close();
+                    DataAccess.ConnectionString.Close();
                 }
                 
             }
@@ -118,7 +140,7 @@ namespace Precision.Services
         {
             string query = "INSERT INTO Customers VALUES (@fname, @lname, @pNumber, @eAddress)";
 
-            using (var conn = DataAccessBase.conString)
+            using (var conn = DataAccess.ConnectionString)
             {
                 try
                 {
@@ -134,28 +156,66 @@ namespace Precision.Services
                 catch (Exception ex)
                 {
                     string error = ex.Message;
+                    DataAccess.ShowSqlErrorDialog();
                 }
             }
 
         }
 
-        public static void RemoveCustomer(int id)
+        public static void EditCustomer(Customer customer)
         {
-            string query = "DELETE FROM Customers WHERE CustomerID = @id";
-            using (var conn = DataAccessBase.conString)
+            string query = "UPDATE Customers " +
+                "SET FirstName = @fname, LastName = @lname, PhoneNumber = @num, EmailAddress = @email " +
+                "WHERE CustomerID = @id AND EXISTS " +
+                "(" +
+                "SELECT Customers.FirstName, Customers.LastName, Customers.PhoneNumber, Customers.EmailAddress " +
+                "EXCEPT " +
+                "SELECT @fname, @lname, @num, @email" +
+                ")";
+            using (var cmd = new SqlCommand(query, DataAccess.ConnectionString))
             {
+                cmd.Parameters.AddWithValue("@id", customer.CustomerID);
+                cmd.Parameters.AddWithValue("@fname", customer.FirstName);
+                cmd.Parameters.AddWithValue("@lname", customer.LastName);
+                cmd.Parameters.AddWithValue("@num", customer.PhoneNumber);
+                cmd.Parameters.AddWithValue("@email", customer.EmailAddress);
+
                 try
                 {
-                    using (var cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@id", id);
-                        cmd.ExecuteNonQuery();
-                    }
+                    DataAccess.ConnectionString.Open();
+                    var affected = cmd.ExecuteNonQuery();
+                }
+                catch(SqlException ex)
+                {
+                    DataAccess.ShowSqlErrorDialog();
+                    string error = ex.Message;
+                }
+                finally
+                {
+                    DataAccess.ConnectionString.Close();
+                }
+            }
+        }
+
+        public static void RemoveCustomer(int id)
+        {
+            string query = "UPDATE Customers SET ArchivedAt = @date WHERE CustomerID = @id";
+            var date = DateTime.Now;
+            using (var cmd = new SqlCommand(query, DataAccess.ConnectionString))
+            {
+                cmd.Parameters.AddWithValue("@date", date);
+                cmd.Parameters.AddWithValue("@id", id);
+                try
+                {
+                    DataAccess.ConnectionString.Open();
+                    cmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
                     string error = ex.Message;
+                    DataAccess.ShowSqlErrorDialog();
                 }
+                finally { DataAccess.ConnectionString.Close(); }
             }
 
         }

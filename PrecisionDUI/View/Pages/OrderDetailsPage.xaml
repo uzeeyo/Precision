@@ -6,12 +6,11 @@
              xmlns:local="clr-namespace:Precision.View"
              xmlns:vm="clr-namespace:Precision.ViewModel"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" 
+             d:Background="{StaticResource MaterialDesignDarkBackground}">
     <UserControl.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
 
         <Style x:Key="TextBoxToggle" TargetType="{x:Type TextBox}">
             <Style.Triggers>
@@ -20,7 +19,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TextBox}">
-                                <TextBlock Text="{Binding PriceFormatted}"/>
+                                <TextBlock Text="{Binding FinalPrice, Mode=OneWay, StringFormat=C}"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -28,79 +27,55 @@
             </Style.Triggers>
             <Setter Property="Foreground" Value="Black"/>
         </Style>
-
-        <Style x:Key="EditModeToggleButton" BasedOn="{StaticResource MaterialDesignFlatAccentButton}" 
-               TargetType="{x:Type Button}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=DataContext.EditMode, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                             Value="true">
-                    <Setter Property="Content" Value="Save"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=DataContext.EditMode, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                             Value="false">
-                    <Setter Property="Content" Value="Edit"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="EditModeToggle" BasedOn="{StaticResource MaterialDesignFlatAccentButton}" 
-               TargetType="{x:Type Button}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding EditMode}" Value="true">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding EditMode}" Value="false">
-                    <Setter Property="IsEnabled" Value="True"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource DarkestPurpBrush}">
 
-        <!--Main Content-->
-        <Grid Margin="25 10 25 25" Background="{StaticResource MaterialDesignDarkBackground}"
-              DataContext="{Binding OrderDetails}">
-            <Grid Margin="15">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="5*"/>
-                </Grid.RowDefinitions>
+    <Grid Margin="25 10 25 25" DataContext="{Binding OrderDetails}">
+        <Grid Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                <Border BorderThickness="0 0 0 2" BorderBrush="{StaticResource LightGrnBrush}">
-                    <DockPanel LastChildFill="False">
-                        <StackPanel DataContext="{Binding Path=DataContext.Customer, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Name: "/>
-                                <TextBlock Text="{Binding FullName}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Phone Number: "/>
-                                <TextBlock Text="{Binding PhoneNumber}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Email: "/>
-                                <TextBlock Text="{Binding EmailAddress}"/>
-                            </StackPanel>
+            <md:Card>
+                <DockPanel LastChildFill="False" Margin="10 20">
+                    <StackPanel DataContext="{Binding Path=DataContext.Customer, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Name: "/>
+                            <TextBlock Text="{Binding FullName}"/>
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Phone Number: "/>
+                            <TextBlock Text="{Binding PhoneNumberFormatted}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Email: "/>
+                            <TextBlock Text="{Binding EmailAddress}"/>
+                        </StackPanel>
+                    </StackPanel>
 
-                        <TextBlock Text="{Binding OrderID}" FontSize="16" DockPanel.Dock="Right"/>
-                        <TextBlock Text="Order ID: " FontSize="16" DockPanel.Dock="Right"/>
-                    </DockPanel>
-                </Border>
+                    <TextBlock Text="{Binding OrderID}" FontSize="16" DockPanel.Dock="Right"/>
+                    <TextBlock Text="Order ID: " FontSize="16" DockPanel.Dock="Right"/>
+                </DockPanel>
+            </md:Card>
 
-                <Grid Grid.Row="1" Background="{StaticResource MaterialDesignDarkBackground}">
-                    <DockPanel LastChildFill="False">
+            <Grid Grid.Row="1" Margin="0 20 0 0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
 
-                        <ListView ItemsSource="{Binding Products}" DockPanel.Dock="Top" >
+                    <ScrollViewer Grid.Row="0" Margin="0 0 0 10">
+                        <ListView ItemsSource="{Binding Products, Mode=TwoWay}">
                             <ListView.View>
                                 <GridView>
-
                                     <GridViewColumn Width="50" x:Name="DeleteButton">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" 
-                                                    IsEnabled="{Binding Path=DataContext.EditMode, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                                <Button Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                                        Command="{Binding Path=DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}">
                                                     <Button.Content>
                                                         <md:PackIcon Kind="Cancel" Height="auto" Width="auto"/>
                                                     </Button.Content>
@@ -109,51 +84,110 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Product"/>
-                                    <!--<GridViewColumn DisplayMemberBinding="{Binding Quantity}" Header="Quantity" />-->
-                                    <GridViewColumn Header="Price">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBox Style="{StaticResource TextBoxToggle}" Text="{Binding Price}"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Taxed" x:Name="Taxed">
+                                    <GridViewColumn Header="Taxed" >
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Width="70">
-                                                    <CheckBox IsChecked="{Binding Taxable}" HorizontalAlignment="Center" 
-                                                              IsEnabled="{Binding Path=DataContext.EditMode, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                                              Style="{StaticResource MaterialDesignAccentCheckBox}"/>
+                                                    <CheckBox IsChecked="{Binding Taxable, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" 
+                                                              Style="{StaticResource MaterialDesignAccentCheckBox}" Command="{Binding Path=DataContext.ChangeTaxableCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-
+                                    <GridViewColumn Header="Price">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Style="{StaticResource TextBoxToggle}" Text="{Binding ChangedPrice, StringFormat=C}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Tax">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Tax, StringFormat=C, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Taxable}" Value="True">
+                                                                    <Setter Property="Opacity" Value="1"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Taxable}" Value="False">
+                                                                    <Setter Property="Opacity" Value="0.4"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>
+                    </ScrollViewer>
 
+                    <DockPanel Grid.Row="1" LastChildFill="False">
+                        <!--Total-->
+                        <StackPanel DockPanel.Dock="Right">
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+                                <TextBlock Text="Subtotal: " Foreground="{StaticResource LightGrnBrush}" FontSize="14"/>
+                                <TextBlock Text="{Binding SubTotal, StringFormat=C}" Foreground="{StaticResource LightGrnBrush}" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+                                <TextBlock Text="Tax: " Foreground="{StaticResource LightGrnBrush}" FontSize="14"/>
+                                <TextBlock Text="{Binding TaxTotal, StringFormat=C}" Foreground="{StaticResource LightGrnBrush}" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+                                <TextBlock Text="Total: " Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
+                                <TextBlock Text="{Binding TotalPrice, StringFormat=C}" Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!--Options Buttons-->
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center" DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                            <Button Content="Add" Style="{StaticResource MaterialDesignFlatLightButton}" Visibility="Hidden"/>
-                            <Button Style="{StaticResource EditModeToggleButton}" d:Content="Edit"
-                                    Command="{Binding EditOrderCommand}" CommandParameter="{Binding EditMode}"/>
-                            <Button Content="Email Inovice" Style="{StaticResource EditModeToggle}"/>
-                            <Button Content="Submit Payment" Style="{StaticResource EditModeToggle}"/>
-                        </StackPanel>
+                            <Button Content="Add" Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                    Command="{x:Static md:DialogHost.OpenDialogCommand}">
+                                <Button.CommandParameter>
+                                    <StackPanel Margin="16" Width="300">
+                                        <TextBlock Text="Select Item" HorizontalAlignment="Center" Margin="0 0 0 10"/>
+                                        <TextBox Text="{Binding ProductSearchBox, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <ScrollViewer Margin="0 10">
+                                            <StackPanel>
+                                                <ListBox x:Name="AddItemSelected" ItemsSource="{Binding FilteredProducts}" 
+                                                         SelectedItem="{Binding SelectedProduct}">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel>
+                                                                <TextBlock Text="{Binding Name}"/>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Content="OK" Style="{StaticResource MaterialDesignFlatAccentButton}"
+                                                    Command="{Binding AddProductCommand}" 
+                                                    CommandParameter="{Binding SelectedProduct}"/>
+                                            <Button Content="Cancel" Style="{StaticResource MaterialDesignFlatButton}"
+                                                Command="{x:Static md:DialogHost.CloseDialogCommand}"/>
+                                        </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-                            <TextBlock Text="Total: $" Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
-                            <TextBlock Text="{Binding Path=DataContext.TotalPrice, RelativeSource={RelativeSource AncestorType=UserControl}}" Foreground="{StaticResource LightGrnBrush}" FontSize="20"/>
+                                    </StackPanel>
+                                </Button.CommandParameter>
+                            </Button>
+                            <Button Content="Email Inovice" Style="{StaticResource MaterialDesignFlatAccentButton}"/>
+                            <Button Content="Submit Payment" Style="{StaticResource MaterialDesignFlatAccentButton}"/>
                         </StackPanel>
-
                     </DockPanel>
 
                 </Grid>
 
             </Grid>
+
         </Grid>
     </Grid>
 
-    
-    
+
+
 </UserControl>
