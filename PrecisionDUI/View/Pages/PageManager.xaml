@@ -25,6 +25,9 @@
         <DataTemplate DataType="{x:Type vm:CustomerEditViewModel}">
             <v:CustomerEditPage/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:MessagesViewModel}">
+            <v:MessagesPage/>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid Margin="50">

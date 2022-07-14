@@ -10,7 +10,52 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:Background="{StaticResource MaterialDesignDarkBackground}">
-    <Grid>
+    <md:Card Margin="25">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Recent Messages-->
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                <ListView ItemsSource="{Binding Threads}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!--Initial Icon-->
+                                <Border Grid.Column="0" BorderBrush="White" 
+                                        CornerRadius="25" Background="{StaticResource LightGrnBrush}"
+                                        Width="30" Height="30">
+                                    <TextBlock Text="JP" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+
+                                <Grid Grid.Column="1" Margin="10 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <TextBlock Text="Ceren Halep" Grid.Row="0" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding LastMessage.Text}" Grid.Row="1"/>
+
+                                    <TextBlock Text="{Binding LastMessage.Date}" Grid.Column="1" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
+        </Grid>
             
-    </Grid>
+    </md:Card>
 </UserControl>

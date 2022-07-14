@@ -28,7 +28,7 @@ namespace Precision.ViewModel
             { "Home", () => _currentPage = null },
             { "Customers", () => new CustomerListViewModel(_instance) },
             { "Orders", () => new OrderListViewModel(_instance) },
-            { "Messages", () => null },
+            { "Messages", () => new MessagesViewModel(_instance) },
             { "Invoices", ()  => null },
             { "Quotes", () => null }
 
