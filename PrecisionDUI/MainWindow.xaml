@@ -236,7 +236,6 @@
                                     </BeginStoryboard>
                                 </EventTrigger>
                             </Grid.Triggers>
-                            <TextBlock/>
 
                         </Grid>
 
